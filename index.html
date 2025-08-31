@@ -26,12 +26,12 @@
   <body class="bg-gray-100 p-4">
     <div class="max-w-7xl mx-auto">
       <h1 class="text-3xl font-bold mb-4 text-center text-blue-700">
-       ⚙️ Production Tracker
+        ⚙️ Production Tracker
       </h1>
 
       <!-- Entry Form -->
       <div class="bg-white p-4 rounded shadow mb-6 space-y-4">
-        <div class="grid grid-cols-6 gap-2">
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
           <input id="date" type="date" class="border p-2 rounded" />
           <select
             id="machine"
@@ -75,12 +75,15 @@
           <h2 class="font-semibold text-lg text-red-600">
             Problem Log (optional)
           </h2>
-          <div class="grid grid-cols-4 gap-2">
-            <input
-              id="problem"
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <textarea
+              name=""
               type="text"
               placeholder="Problem Details"
-              class="border p-2 rounded col-span-2" />
+              id="problem"
+              cols="10"
+              rows="5"
+              class="border p-2 rounded col-span-6"></textarea>
             <input
               id="startTime"
               type="time"
@@ -198,8 +201,7 @@
       </div>
     </div>
 
-
     <!-- js file export -->
-     <script src="js/script.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>
