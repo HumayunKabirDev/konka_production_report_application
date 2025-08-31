@@ -197,9 +197,13 @@ function resetMonthlyReport() {
 
     // Logout বাটন কাজ করবে
     const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", () => {
-      window.location.href = "index.html"; // Redirect to login
-    });
+     if(localStorage.getItem("loggedIn") !== "true"){
+    window.location.href = "index.html"; // back to login
+  }
+   logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("loggedIn");
+  window.location.href = "index.html";
+});
 
 renderTable();
 generateFullReport();
