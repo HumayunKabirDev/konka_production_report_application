@@ -194,9 +194,6 @@ function resetMonthlyReport() {
   document.getElementById("reportDays").value = "";
 }
 
-    if(localStorage.getItem("loggedIn") !== "true") {
-      window.location.href = "index.html";
-    }
 
     // Logout বাটন কাজ করবে
     const logoutBtn = document.getElementById("logoutBtn");
