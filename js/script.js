@@ -194,5 +194,11 @@ function resetMonthlyReport() {
   document.getElementById("reportDays").value = "";
 }
 
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("loggedIn"); // Clear session
+      window.location.href = "login.html"; // Redirect to login
+    });
+
 renderTable();
 generateFullReport();

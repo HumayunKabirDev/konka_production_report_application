@@ -23,25 +23,34 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100 p-4">
-    <div class="max-w-7xl mx-auto">
-      <h1 class="text-3xl font-bold mb-4 text-center text-blue-700">
+  <body class="bg-gray-300 p-4">
+    <div class="max-w-7xl mx-auto relative">
+      <button
+        id="logoutBtn"
+        class="absolute right-5 top-0 bg-red-500 text-white p-2 rounded hover:bg-red-600">
+        Logout
+      </button>
+      <h1 class="text-5xl font-bold mb-4 text-center text-blue-700">
         ⚙️ Production Tracker
       </h1>
 
       <!-- Entry Form -->
       <div class="bg-white p-4 rounded shadow mb-6 space-y-4">
+        <h3 class="text-2xl text-teal-600 font-bold">Daily Report Input ...</h3>
         <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
-          <input id="date" type="date" class="border p-2 rounded" />
+          <input
+            id="date"
+            type="date"
+            class="border border-green-300 focus:outline-none p-2 rounded" />
           <select
             id="machine"
-            class="border p-2 rounded"
+            class="border border-green-300 focus:outline-none p-2 rounded"
             onchange="populateModels()">
             <option value="">Select Machine</option>
           </select>
           <select
             id="model"
-            class="border p-2 rounded"
+            class="border border-green-300 focus:outline-none p-2 rounded"
             onchange="updateCounts()">
             <option value="">Select Model</option>
           </select>
@@ -49,51 +58,58 @@
             id="operator"
             type="text"
             placeholder="Operator"
-            class="border p-2 rounded" />
+            class="border border-green-300 focus:outline-none p-2 rounded" />
           <input
             id="production"
             type="number"
             placeholder="Production"
-            class="border p-2 rounded"
+            class="border border-green-300 focus:outline-none p-2 rounded"
             value="0"
             oninput="updateGood()" />
           <input
             id="wastage"
             type="number"
             placeholder="Wastage"
-            class="border p-2 rounded"
+            class="border border-green-300 focus:outline-none p-2 rounded"
             value="0"
             oninput="updateGood()" />
         </div>
         <div class="flex items-center gap-4">
-          <label class="font-semibold">Good:</label>
-          <span id="goodCount" class="font-bold text-green-600">0</span>
+          <label class="font-semibold text-xl">Good:</label>
+          <span id="goodCount" class="font-bold text-xl text-green-600">0</span>
         </div>
 
         <!-- Problem Section -->
-        <div class="bg-gray-50 p-3 rounded border space-y-2">
-          <h2 class="font-semibold text-lg text-red-600">
-            Problem Log (optional)
-          </h2>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div class="bg-gray-50 p-3 rounded border border-green-300 space-y-2">
+          <h2 class="font-semibold text-2xl text-red-600">Problem Details</h2>
+          <div class="flex flex-col md:flex-row gap-4">
             <textarea
               name=""
               type="text"
-              placeholder="Problem Details"
+              placeholder="Write Problem here ..."
               id="problem"
-              cols="10"
-              rows="5"
-              class="border p-2 rounded col-span-4 "></textarea>
-            <input
-              id="startTime"
-              type="time"
-              class="border p-2 rounded"
-              onchange="updateDuration()" />
-            <input
-              id="endTime"
-              type="time"
-              class="border p-2 rounded"
-              onchange="updateDuration()" />
+              cols="100"
+              rows="2"
+              class="border p-2 rounded  bg-gray-100 border-gray-300"></textarea>
+
+            <div class="">
+                <h3>Start Time</h3>
+              <input
+                id="startTime"
+                type="time"
+                class="border focus:outline-none border-green-200 p-2 rounded bg-blue-50"
+                onchange="updateDuration()" />
+            </div>
+
+            <div class="">
+                <h3>End Time</h3>
+              <input
+                id="endTime"
+                type="time"
+                class="border focus:outline-none border-green-200 p-2 rounded bg-red-50"
+                onchange="updateDuration()" />     
+            </div>
+
             <span
               id="durationDisplay"
               class="col-span-4 font-medium text-blue-600 mt-1"></span>
@@ -116,21 +132,23 @@
 
       <!-- Data Table -->
       <div class="bg-white p-4 rounded shadow mb-6 overflow-x-auto">
-        <h2 class="text-xl font-semibold text-purple-700 mb-2">
+        <h2 class="text-2xl font-semibold text-purple-700 mb-2">
           Daily Entries
         </h2>
         <table id="dataTable" class="w-full border text-sm">
           <thead class="bg-gray-200">
             <tr class="text-gray-700">
-              <th class="p-2 border">Date</th>
-              <th class="p-2 border">Machine</th>
-              <th class="p-2 border">Model</th>
-              <th class="p-2 border">Operator</th>
+              <th class="p-2 border bg-orange-100">Date</th>
+              <th class="p-2 border bg-purple-100">Machine</th>
+              <th class="p-2 border bg-teal-100">Model</th>
+              <th class="p-2 border bg-lime-100">Operator</th>
               <th class="p-2 border bg-blue-100">Production</th>
               <th class="p-2 border bg-red-100">Wastage</th>
               <th class="p-2 border bg-green-100">Good</th>
-              <th class="p-2 border text-red-600">Problem</th>
-              <th class="p-2 border text-blue-600">Duration (min)</th>
+              <th class="p-2 border bg-cyan-100 text-red-600">Problem</th>
+              <th class="p-2 border bg-violet-200 text-blue-600">
+                Duration (min)
+              </th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -142,26 +160,33 @@
         <h2 class="text-2xl font-semibold text-green-700 mb-2">
           Monthly Summary
         </h2>
-        <div class="flex gap-2 mb-2 flex-wrap">
-          <input type="month" id="reportMonth" class="border p-2 rounded" />
-          <select id="reportModel" class="border p-2 rounded">
-            <option value="">Select Model (optional)</option>
-          </select>
-          <input
-            type="text"
-            id="reportDays"
-            placeholder="Days (e.g. 10,15,17)"
-            class="border p-2 rounded" />
-          <button
-            onclick="generateMonthlyReport()"
-            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-            Generate Report
-          </button>
-          <button
-            onclick="resetMonthlyReport()"
-            class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-            Reset Report
-          </button>
+        <div class="flex gap-2 mb-2 flex-wrap items-center justify-between">
+          <div class="flex flex-col md:flex-row items-center gap-x-5">
+            <div class="">
+              <h1>Select Month</h1>
+              <input type="month" id="reportMonth" class="border p-2 rounded" />
+            </div>
+
+            <div class="">
+              <h2>Model Search</h2>
+              <select id="reportModel" class="border p-2 rounded">
+                <option value="">Select Model</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button
+              onclick="generateMonthlyReport()"
+              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+              Generate Report
+            </button>
+            <button
+              onclick="resetMonthlyReport()"
+              class="bg-yellow-500 text-white px-4 py-2 mt-4 md:mt-0 rounded hover:bg-yellow-600">
+              Reset Report
+            </button>
+          </div>
         </div>
         <div class="overflow-x-auto">
           <table id="monthlyReportTable" class="w-full border text-sm">
