@@ -197,7 +197,7 @@ function resetMonthlyReport() {
     const logoutBtn = document.getElementById("logoutBtn");
     logoutBtn.addEventListener("click", () => {
       localStorage.removeItem("loggedIn"); // Clear session
-      window.location.href = "home.html"; // Redirect to login
+      window.location.href = "index.html"; // Redirect to login
     });
 
 renderTable();
