@@ -1,232 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Production Tracker with Reports</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @media (max-width: 768px) {
-        table {
-          font-size: 12px;
-        }
-        .grid-cols-6 {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-        .grid-cols-4 {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="bg-orange-200 p-8 rounded shadow-md w-80">
+
+    <h2 class="text-4xl text-green-800 font-bold mb-4 text-center">Login</h2>
+    <form id="loginForm">
+      <input type="text" id="number" placeholder="Login Number Here ..." class="focus:outline-none border p-2 w-full mb-3 rounded">
+      <input type="password" id="password" placeholder="Enter Password" class="focus:outline-none border p-2 w-full mb-4 rounded">
+      <button type="submit" class="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600">Login</button>
+    </form>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+
+    loginForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const number = document.getElementById("number").value;
+      const password = document.getElementById("password").value;
+
+      // Simple validation
+      if(number === "01755696435" && password === "225588") {
+        // Redirect to index.html
+        window.location.href = "index.html";
+      } else {
+        alert("Invalid number or password!");
       }
-      th,
-      td {
-        text-align: center;
-      }
-    </style>
-  </head>
-  <body class="bg-gray-300 p-4">
-    <div class="max-w-7xl mx-auto relative">
-      <button
-        id="logoutBtn"
-        class="absolute right-5 top-0 bg-red-500 text-white p-2 rounded hover:bg-red-600">
-        Logout
-      </button>
-      <h1 class="text-5xl font-bold mb-4 text-center text-blue-700">
-        ⚙️ Production Tracker
-      </h1>
+    });
+  </script>
 
-      <!-- Entry Form -->
-      <div class="bg-white p-4 rounded shadow mb-6 space-y-4">
-        <h3 class="text-2xl text-teal-600 font-bold">Daily Report Input ...</h3>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
-          <input
-            id="date"
-            type="date"
-            class="border border-green-300 focus:outline-none p-2 rounded" />
-          <select
-            id="machine"
-            class="border border-green-300 focus:outline-none p-2 rounded"
-            onchange="populateModels()">
-            <option value="">Select Machine</option>
-          </select>
-          <select
-            id="model"
-            class="border border-green-300 focus:outline-none p-2 rounded"
-            onchange="updateCounts()">
-            <option value="">Select Model</option>
-          </select>
-          <input
-            id="operator"
-            type="text"
-            placeholder="Operator"
-            class="border border-green-300 focus:outline-none p-2 rounded" />
-          <input
-            id="production"
-            type="number"
-            placeholder="Production"
-            class="border border-green-300 focus:outline-none p-2 rounded"
-            value="0"
-            oninput="updateGood()" />
-          <input
-            id="wastage"
-            type="number"
-            placeholder="Wastage"
-            class="border border-green-300 focus:outline-none p-2 rounded"
-            value="0"
-            oninput="updateGood()" />
-        </div>
-        <div class="flex items-center gap-4">
-          <label class="font-semibold text-xl">Good:</label>
-          <span id="goodCount" class="font-bold text-xl text-green-600">0</span>
-        </div>
-
-        <!-- Problem Section -->
-        <div class="bg-gray-50 p-3 rounded border border-green-300 space-y-2">
-          <h2 class="font-semibold text-2xl text-red-600">Problem Details</h2>
-          <div class="flex flex-col md:flex-row gap-4">
-            <textarea
-              name=""
-              type="text"
-              placeholder="Write Problem here ..."
-              id="problem"
-              cols="100"
-              rows="2"
-              class="border p-2 rounded  bg-gray-100 border-gray-300"></textarea>
-
-            <div class="">
-                <h3>Start Time</h3>
-              <input
-                id="startTime"
-                type="time"
-                class="border focus:outline-none border-green-200 p-2 rounded bg-blue-50"
-                onchange="updateDuration()" />
-            </div>
-
-            <div class="">
-                <h3>End Time</h3>
-              <input
-                id="endTime"
-                type="time"
-                class="border focus:outline-none border-green-200 p-2 rounded bg-red-50"
-                onchange="updateDuration()" />     
-            </div>
-
-            <span
-              id="durationDisplay"
-              class="col-span-4 font-medium text-blue-600 mt-1"></span>
-          </div>
-        </div>
-
-        <div class="flex gap-2">
-          <button
-            onclick="addEntry()"
-            class="mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Add Entry
-          </button>
-          <button
-            onclick="resetAll()"
-            class="mt-3 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-            Reset All Entries
-          </button>
-        </div>
-      </div>
-
-      <!-- Data Table -->
-      <div class="bg-white p-4 rounded shadow mb-6 overflow-x-auto">
-        <h2 class="text-2xl font-semibold text-purple-700 mb-2">
-          Daily Entries
-        </h2>
-        <table id="dataTable" class="w-full border text-sm">
-          <thead class="bg-gray-200">
-            <tr class="text-gray-700">
-              <th class="p-2 border bg-orange-100">Date</th>
-              <th class="p-2 border bg-purple-100">Machine</th>
-              <th class="p-2 border bg-teal-100">Model</th>
-              <th class="p-2 border bg-lime-100">Operator</th>
-              <th class="p-2 border bg-blue-100">Production</th>
-              <th class="p-2 border bg-red-100">Wastage</th>
-              <th class="p-2 border bg-green-100">Good</th>
-              <th class="p-2 border bg-cyan-100 text-red-600">Problem</th>
-              <th class="p-2 border bg-violet-200 text-blue-600">
-                Duration (min)
-              </th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-
-      <!-- Monthly Report -->
-      <div class="bg-white p-4 rounded shadow mb-6">
-        <h2 class="text-2xl font-semibold text-green-700 mb-2">
-          Monthly Summary
-        </h2>
-        <div class="flex gap-2 mb-2 flex-wrap items-center justify-between">
-          <div class="flex flex-col md:flex-row items-center gap-x-5">
-            <div class="">
-              <h1>Select Month</h1>
-              <input type="month" id="reportMonth" class="border p-2 rounded" />
-            </div>
-
-            <div class="">
-              <h2>Model Search</h2>
-              <select id="reportModel" class="border p-2 rounded">
-                <option value="">Select Model</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="buttons">
-            <button
-              onclick="generateMonthlyReport()"
-              class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-              Generate Report
-            </button>
-            <button
-              onclick="resetMonthlyReport()"
-              class="bg-yellow-500 text-white px-4 py-2 mt-4 md:mt-0 rounded hover:bg-yellow-600">
-              Reset Report
-            </button>
-          </div>
-        </div>
-        <div class="overflow-x-auto">
-          <table id="monthlyReportTable" class="w-full border text-sm">
-            <thead class="bg-gray-200">
-              <tr>
-                <th class="p-2 border">Machine</th>
-                <th class="p-2 border">Model</th>
-                <th class="p-2 border bg-blue-100">Total Production</th>
-                <th class="p-2 border bg-red-100">Total Wastage</th>
-                <th class="p-2 border bg-green-100">Total Good</th>
-              </tr>
-            </thead>
-            <tbody id="monthlyReportBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Full Report -->
-      <div class="bg-white p-4 rounded shadow mb-6">
-        <h2 class="text-2xl font-semibold text-purple-700 mb-2">
-          Full Report (All Months)
-        </h2>
-        <div class="overflow-x-auto">
-          <table id="fullReportTable" class="w-full border text-sm">
-            <thead class="bg-gray-200">
-              <tr>
-                <th class="p-2 border">Machine</th>
-                <th class="p-2 border">Model</th>
-                <th class="p-2 border bg-blue-100">Total Production</th>
-                <th class="p-2 border bg-red-100">Total Wastage</th>
-                <th class="p-2 border bg-green-100">Total Good</th>
-              </tr>
-            </thead>
-            <tbody id="fullReportBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- js file export -->
-    <script src="js/script.js"></script>
-  </body>
+</body>
 </html>
